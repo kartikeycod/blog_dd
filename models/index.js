@@ -3,7 +3,7 @@ const Role = require("./Role");
 const Permission = require("./Permission");
 const RolePermission = require("./RolePermission");
 const Blog = require("./Blog");
-const UserPermission = require("./UserPermission");
+const UserPermission = require("./userPermission");
 
 /* User -> Role */
 
