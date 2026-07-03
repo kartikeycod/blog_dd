@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Edit Blog</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Poppins, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .container {
+            background: white;
+            width: 700px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4f46e5;
+            margin-bottom: 30px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        input[type=file] {
+            padding: 10px;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 17px;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: #372fd4;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Edit Blog</h1>
+
+        <form action="/blogs/edit/<%= blog.id %>" method="POST" enctype="multipart/form-data">
+
+            <input type="text" name="title" value="<%= blog.title %>" required>
+
+            <br><br>
+
+            <input type="text" name="category" value="<%= blog.category %>" required>
+
+            <br><br>
+
+            <input type="file" name="image">
+
+            <br><br>
+
+            <% if(blog.image){ %>
+
+                <img src="<%= blog.image %>" width="250">
+
+                <br><br>
+
+                <% } %>
+
+                    <textarea name="content" rows="12" cols="70" required><%= blog.content %></textarea>
+
+                    <br><br>
+
+                    <button>
+
+                        Update Blog
+
+                    </button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

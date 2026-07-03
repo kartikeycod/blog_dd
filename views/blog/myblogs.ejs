@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blogs</title>
+    <style>
+        /* Base Reset & Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fcfbfe; /* Very light purple/white tint */
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4b0082; /* Deep Indigo/Purple */
+            border-bottom: 2px solid #e6d8f2;
+            padding-bottom: 10px;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e6d8f2;
+            margin: 20px 0;
+        }
+
+        /* Utility Links/Buttons */
+        .nav-actions {
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #6a1b9a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn-back:hover {
+            text-decoration: underline;
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #6a1b9a; /* Bright Purple */
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #4b0082; /* Darker purple on hover */
+        }
+
+        /* Action Specific Buttons */
+        .btn-secondary {
+            background-color: #f3e5f5;
+            color: #6a1b9a;
+            border: 1px solid #d1c4e9;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e1bee7;
+        }
+
+        .btn-danger {
+            background-color: #fff0f0;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .btn-danger:hover {
+            background-color: #ffebee;
+            color: #b71c1c;
+        }
+
+        /* Blog Card Styling */
+        .blog-card {
+            background: white;
+            border: 1px solid #e1bee7; /* Light purple border */
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(106, 27, 154, 0.05); /* Soft purple-tinted shadow */
+        }
+
+        .blog-card h2 {
+            margin-top: 0;
+            color: #4b0082;
+        }
+
+        .blog-image {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .blog-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .blog-meta strong {
+            color: #6a1b9a;
+        }
+
+        .blog-content {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Wrapper for buttons inside cards */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<a href="/blogs" class="btn-back">← See All Blogs</a>
+
+<h1>My Blogs</h1>
+
+<%
+const permissions = currentUser
+    ? currentUser.Permissions.map(p => p.name)
+    : [];
+%>
+
+<div class="nav-actions">
+    <% if (permissions.includes("WRITE_BLOG")) { %>
+        <a href="/blogs/create">
+            <button>Create New Blog</button>
+        </a>
+    <% } %>
+</div>
+
+<hr>
+
+<% if(blogs.length === 0){ %>
+    <h3 style="color: #666;">You haven't written any blogs yet.</h3>
+<% } %>
+
+<% blogs.forEach(blog => { %>
+
+<div class="blog-card">
+
+    <% if(blog.image){ %>
+        <img src="<%= blog.image %>" width="250" class="blog-image" alt="Blog Image">
+    <% } %>
+
+    <h2><%= blog.title %></h2>
+
+    <p class="blog-meta">
+        <strong>Category:</strong>
+        <%= blog.category %>
+    </p>
+
+    <p class="blog-content">
+        <%= blog.content.substring(0,150) %>...
+    </p>
+
+    <div class="card-actions">
+        <a href="/blogs/<%= blog.id %>">
+            <button>Read More</button>
+        </a>
+
+        <% if(permissions.includes("EDIT_BLOG")){ %>
+            <a href="/blogs/edit/<%= blog.id %>">
+                <button class="btn-secondary">Edit</button>
+            </a>
+        <% } %>
+
+        <% if(permissions.includes("DELETE_BLOG")){ %>
+            <form
+                action="/blogs/delete/<%= blog.id %>"
+                method="POST"
+                style="display:inline;">
+                <button type="submit" class="btn-danger"
+                    onclick="return confirm('Delete this blog?')">
+                    Delete
+                </button>
+            </form>
+        <% } %>
+    </div>
+
+</div>
+
+<% }) %>
+
+</body>
+</html>

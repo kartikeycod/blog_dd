@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>All Blogs</title>
+
+    <link rel="stylesheet" href="/blog/index.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+
+        <h1>📝 All Blogs</h1>
+
+        <%
+        const permissions = currentUser
+            ? currentUser.Permissions.map(p => p.name)
+            : [];
+        %>
+
+        <% if(currentUser && permissions.includes("WRITE_BLOG")) { %>
+
+            <a href="/blogs/create" class="create-btn">
+                + Create Blog
+            </a>
+
+        <% } %>
+       <a href="/logout" class="create-btn" style="float: right; text-decoration: none;">logout</a>
+
+
+    <% if (
+    currentUser &&
+    (currentUser.Role.name === "Admin" ||
+     currentUser.Role.name === "SuperAdmin")
+) { %>
+
+    <a href="/admin" class="admin-btn">
+        Admin Panel
+    </a>
+
+<% } %>
+
+
+<a href="/blogs/my-blogs" class="admin-btn">My Blogs</a>
+
+    </header>
+
+    <% blogs.forEach(blog => { %>
+
+    <div class="blog-card">
+
+        <h2><%= blog.title %></h2>
+
+        <p>
+            <strong>Category :</strong>
+            <%= blog.category %>
+        </p>
+
+        <p>
+            <strong>Author :</strong>
+            <%= blog.User.name %>
+        </p>
+
+        <% if(blog.image){ %>
+
+            <img src="<%= blog.image %>" class="blog-image">
+
+        <% } %>
+
+        <p class="content">
+            <%= blog.content.substring(0,150) %>...
+        </p>
+
+        <!-- DEBUG (REMOVE LATER) -->
+
+        <div class="debug">
+
+            <p>
+                Current User ID :
+                <%= currentUser ? currentUser.id : "Not Logged In" %>
+            </p>
+
+            <p>
+                Blog Owner ID :
+                <%= blog.userId %>
+            </p>
+
+            <p>
+                User Permissions :
+                <%= permissions.join(", ") %>
+            </p>
+
+        </div>
+
+        <div class="actions">
+
+            <a href="/blogs/<%= blog.id %>" class="read-btn">
+                Read More
+            </a>
+
+            <% if (
+                currentUser &&
+                (
+                    currentUser.id == blog.userId ||
+                    currentUser.Role.name == "Admin" ||
+                    currentUser.Role.name == "SuperAdmin"
+                )
+                &&
+                permissions.includes("EDIT_BLOG")
+            ) { %>
+
+                <a href="/blogs/edit/<%= blog.id %>" class="edit-btn">
+                    Edit
+                </a>
+
+            <% } %>
+
+            <% if (
+                currentUser &&
+                (
+                    currentUser.id == blog.userId ||
+                    currentUser.Role.name == "Admin" ||
+                    currentUser.Role.name == "SuperAdmin"
+                )
+                &&
+                permissions.includes("DELETE_BLOG")
+            ) { %>
+
+                <form
+                    action="/blogs/delete/<%= blog.id %>"
+                    method="POST"
+                    style="display:inline;">
+
+                    <button type="submit" class="delete-btn">
+                        Delete
+                    </button>
+
+                </form>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+    <% }) %>
+
+</div>
+// <script>
+//     function redirect(){
+//         const btn=document.querySelector('.admin-btn');
+//         btn.addEventListener('click',()=>{
+//             if(req.user.role==="Admin" || req.user.role==="SuperAdmin"){
+//             window.location.href='/admin';}
+//             else{
+//                 alert("You don't have permission to access the admin panel.");
+//             }
+//         })
+//     }
+//     </script>
+</body>
+
+</html>

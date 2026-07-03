@@ -1,0 +1,262 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Super Admin Dashboard</h1>
+
+        <% if (locals.successMessage && successMessage.length > 0) { %>
+            <div class="alert-success" id="successAlert">
+                <span>✅</span> <%= successMessage %>
+            </div>
+            <script>
+                setTimeout(() => {
+                    const alert = document.getElementById('successAlert');
+                    if(alert) alert.style.display = 'none';
+                }, 4000);
+            </script>
+        <% } %>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Role</th>
+                        <th>Permissions</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td class="user-name"><%= user.name %></td>
+                            <td class="user-email"><%= user.email %></td>
+                            
+                            <form action="/admin/update-user" method="POST">
+                                <td>
+                                    <select name="status">
+                                        <option value="PENDING" <%= user.status === "PENDING" ? "selected" : "" %>>PENDING</option>
+                                        <option value="ACTIVE"  <%= user.status === "ACTIVE" ? "selected" : "" %>>ACTIVE</option>
+                                        <option value="BLOCKED" <%= user.status === "BLOCKED" ? "selected" : "" %>>BLOCKED</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="roleId">
+                                        <% roles.forEach(role => { %>
+                                            <option value="<%= role.id %>" <%= user.roleId === role.id ? "selected" : "" %>>
+                                                <%= role.name %>
+                                            </option>
+                                        <% }) %>
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="permissions-wrapper">
+                                        <% permissions.forEach(permission => { %>
+                                            <label class="permission-label">
+                                                <input 
+                                                    type="checkbox" 
+                                                    name="permissions" 
+                                                    value="<%= permission.id %>" 
+                                                    class="permission-checkbox"
+                                                    <%= user.Permissions && user.Permissions.some(p => p.id === permission.id) ? "checked" : "" %>
+                                                >
+                                                <%= permission.name %>
+                                            </label>
+                                        <% }) %>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="hidden" name="userId" value="<%= user.id %>">
+                                    <button class="btn-update">Update</button>
+                                </td>
+                            </form>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Super Admin Dashboard</h1>
+
+        <% if (locals.successMessage && locals.successMessage.length > 0) { %>
+            <div class="alert-success" id="successAlert">
+                <span>✅</span> <%= successMessage %>
+            </div>
+
+            <script>
+                setTimeout(() => {
+                    const alert = document.getElementById('successAlert');
+                    if (alert) alert.style.display = 'none';
+                }, 2000);
+            </script>
+        <% } %>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Role</th>
+                        <th>Permissions</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <% users.forEach(user => { %>
+
+                        <% if(!user.Role || user.Role.name !== "SuperAdmin") { %>
+
+                        <tr>
+
+                            <td class="user-name">
+                                <%= user.name %>
+                            </td>
+
+                            <td class="user-email">
+                                <%= user.email %>
+                            </td>
+
+                            <form action="/admin/update-user" method="POST">
+
+                                <td>
+
+                                    <select name="status">
+
+                                        <option
+                                            value="PENDING"
+                                            <%= user.status === "PENDING" ? "selected" : "" %>>
+                                            PENDING
+                                        </option>
+
+                                        <option
+                                            value="ACTIVE"
+                                            <%= user.status === "ACTIVE" ? "selected" : "" %>>
+                                            ACTIVE
+                                        </option>
+
+                                        <option
+                                            value="BLOCKED"
+                                            <%= user.status === "BLOCKED" ? "selected" : "" %>>
+                                            BLOCKED
+                                        </option>
+
+                                    </select>
+
+                                </td>
+
+                                <td>
+
+                                    <select name="roleId">
+
+                                        <% roles.forEach(role => { %>
+
+                                            <option
+                                                value="<%= role.id %>"
+                                                <%= user.roleId === role.id ? "selected" : "" %>>
+
+                                                <%= role.name %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="permissions-wrapper">
+
+                                        <% permissions.forEach(permission => { %>
+
+                                            <label class="permission-label">
+
+                                                <input
+                                                    type="checkbox"
+                                                    name="permissions"
+                                                    value="<%= permission.id %>"
+                                                    class="permission-checkbox"
+
+                                                    <%= user.Permissions &&
+                                                        user.Permissions.some(
+                                                            p => p.id === permission.id
+                                                        )
+                                                        ? "checked"
+                                                        : ""
+                                                    %>
+                                                >
+
+                                                <%= permission.name %>
+
+                                            </label>
+
+                                        <% }) %>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <input
+                                        type="hidden"
+                                        name="userId"
+                                        value="<%= user.id %>"
+                                    >
+
+                                    <button class="btn-update">
+                                        Update
+                                    </button>
+
+                                </td>
+
+                            </form>
+
+                        </tr>
+
+                        <% } %>
+
+                    <% }) %>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
