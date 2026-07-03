@@ -113,7 +113,7 @@
             console.log("✅ Database Synced");
 
             // Seed Initial Data
-            // await seedDatabase();
+            await seedDatabase();
 
             // Start Express Server
             app.listen(PORT, () => {
